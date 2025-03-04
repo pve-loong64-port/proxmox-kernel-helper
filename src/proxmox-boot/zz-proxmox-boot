@@ -243,6 +243,34 @@ check_grub_efi_package() {
 	warn "Install 'grub-efi-amd64' to get updates."
 }
 
+check_grub_efi_removable_status() {
+	# not booted in EFI, no need to care about removable bootloader
+	if [ ! -d /sys/firmware/efi ]; then
+		return
+	fi
+
+	# no removable bootloader
+	if [ ! -f "/boot/efi/EFI/BOOT/BOOTX64.efi" ]; then
+		return
+	fi
+
+	debconf_value="$(debconf-show --db configdb grub-efi-amd64 grub-pc | grep 'force_efi_extra_removable')"
+
+	# packages already set up to install a removable copy, let's trust that it works
+	if echo "${debconf_value}" | grep -qE ': true$'; then
+		return
+	fi
+
+	echo ""
+	echo "Removable bootloader at '/boot/efi/EFI/BOOT/BOOTX64.efi' found, but Grub packages not set up to update it!"
+	echo "Run the following command:"
+	echo ""
+	echo "echo 'grub-efi-amd64 grub2/force_efi_extra_removable boolean true' | debconf-set-selections -v -u"
+	echo ""
+	echo "Followed by re-installing Grub with 'apt install --reinstall grub-efi-amd64'"
+	echo ""
+}
+
 set -- $DEB_MAINT_PARAMS
 mode="${1#\'}"
 mode="${mode%\'}"
@@ -257,6 +285,7 @@ case $0:$mode in
 		update_esps
 		disable_systemd_boot_hook
 		check_grub_efi_package
+		check_grub_efi_removable_status
 	;;
 	 */postrm.d/*:|*/postrm.d/*:remove)
 		reexec_in_mountns "$@"
@@ -265,6 +294,7 @@ case $0:$mode in
 		update_esps
 		disable_systemd_boot_hook
 		check_grub_efi_package
+		check_grub_efi_removable_status
 	;;
 esac
 
