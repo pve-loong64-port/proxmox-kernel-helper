@@ -1,3 +1,10 @@
+proxmox-kernel-helper (8.1.1) bookworm; urgency=medium
+
+  * check removable status of EFI fallback bootloader to ensure that this
+    second copy of the bootloader also gets updated.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 04 Mar 2025 16:05:34 +0100
+
 proxmox-kernel-helper (8.1.0) bookworm; urgency=medium
 
   * re-add the simplefb module to initramfs again
