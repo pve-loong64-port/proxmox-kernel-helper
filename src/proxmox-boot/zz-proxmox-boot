@@ -262,12 +262,12 @@ check_grub_efi_removable_status() {
 	fi
 
 	echo ""
-	echo "Removable bootloader at '/boot/efi/EFI/BOOT/BOOTX64.efi' found, but Grub packages not set up to update it!"
+	echo "Removable bootloader found at '/boot/efi/EFI/BOOT/BOOTX64.efi', but GRUB packages not set up to update it!"
 	echo "Run the following command:"
 	echo ""
 	echo "echo 'grub-efi-amd64 grub2/force_efi_extra_removable boolean true' | debconf-set-selections -v -u"
 	echo ""
-	echo "Followed by re-installing Grub with 'apt install --reinstall grub-efi-amd64'"
+	echo "Then reinstall GRUB with 'apt install --reinstall grub-efi-amd64'"
 	echo ""
 }
 
