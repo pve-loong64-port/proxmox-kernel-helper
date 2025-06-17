@@ -9,7 +9,7 @@ POSTRMHOOKDIR = $(DESTDIR)/etc/kernel/postrm.d
 POSTINITRAMFSHOOKDIR = $(DESTDIR)/etc/initramfs/post-update.d
 SHARE_SCRIPTDIR = $(DESTDIR)/usr/share/proxmox-kernel-helper/scripts
 GRUB_CFG_DIR = $(DESTDIR)/etc/grub.d
-SERVICE_DIR = $(DESTDIR)/lib/systemd/system
+SERVICE_DIR = $(DESTDIR)/usr/lib/systemd/system
 
 .PHONY: all
 all:
