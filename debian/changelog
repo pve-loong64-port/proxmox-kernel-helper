@@ -1,3 +1,12 @@
+proxmox-kernel-helper (8.1.2) unstable; urgency=medium
+
+  * d/triggers: add interest on boot-loader updates.
+
+  * d/postinst: run proxmox-boot-tool reinit once upon upgrade before
+    triggers can become effective.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 22 Jul 2025 12:41:17 +0200
+
 proxmox-kernel-helper (8.1.1) bookworm; urgency=medium
 
   * check removable status of EFI fallback bootloader to ensure that this
