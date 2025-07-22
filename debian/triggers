@@ -1,1 +1,3 @@
 activate-noawait update-initramfs
+interest-noawait /usr/lib/grub
+interest-noawait /usr/lib/systemd/boot
