@@ -1,4 +1,10 @@
-proxmox-kernel-helper (8.1.2) unstable; urgency=medium
+proxmox-kernel-helper (8.1.3) bookworm; urgency=medium
+
+  * d/triggers: also signal interest for updates to the bootloader shim.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 22 Jul 2025 13:45:41 +0200
+
+proxmox-kernel-helper (8.1.2) bookworm; urgency=medium
 
   * d/triggers: add interest on boot-loader updates.
 
