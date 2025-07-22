@@ -1,3 +1,13 @@
+proxmox-kernel-helper (9.0.1) trixie; urgency=medium
+
+  * d/triggers: add interest on boot-loader updates and reinit the proxmox
+    boot tool on such updates.
+
+  * d/postinst: run proxmox-boot-tool reinit once upon upgrade before
+    triggers can become effective.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 22 Jul 2025 13:39:47 +0200
+
 proxmox-kernel-helper (9.0.0) trixie; urgency=medium
 
   * re-build for Debian 13 Trixie based Proxmox projects.
