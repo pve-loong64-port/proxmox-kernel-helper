@@ -12,6 +12,11 @@ case "$1" in
             echo "$0: legacy manual kernel list /etc/kernel/pve-efiboot-manual-kernels found moving to /etc/kernel/proxmox-boot-manual-kernels" 1>&2
             mv /etc/kernel/pve-efiboot-manual-kernels /etc/kernel/proxmox-boot-manual-kernels
         fi
+        # TODO remove with PVE 10+
+        if test -n "$2" && dpkg --compare-versions "$2" 'lt' '8.1.2~'; then
+            echo "$0: running proxmox-boot-tool reinit"
+            proxmox-boot-tool reinit || true
+        fi
     ;;
 
     triggered)
