@@ -13,11 +13,7 @@ case "$1" in
             mv /etc/kernel/pve-efiboot-manual-kernels /etc/kernel/proxmox-boot-manual-kernels
         fi
 
-        # TODO remove with PVE 10+
-        if test -n "$2" && dpkg --compare-versions "$2" 'gt' '9.0.0~' && dpkg --compare-versions "$2" 'lt' '9.0.1~'; then
-            echo "$0: running proxmox-boot-tool reinit"
-            proxmox-boot-tool reinit || true
-        fi
+        proxmox-boot-tool reinit || true
     ;;
 
     triggered)
