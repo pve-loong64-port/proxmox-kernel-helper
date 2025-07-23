@@ -75,7 +75,7 @@ update_esp_func() {
 	mountpoint="${MOUNTROOT}/${curr_uuid}"
 	mkdir -p "${mountpoint}" || \
 		{ warn "creation of mountpoint ${mountpoint} failed - skipping"; return; }
-	mount "${path}" "${mountpoint}" || \
+	mount -t vfat -o umask=0077 "${path}" "${mountpoint}" || \
 		{ warn "mount of ${path} failed - skipping"; return; }
 
 	if [ -e "${mountpoint}/EFI/proxmox/grubx64.efi" ]; then
