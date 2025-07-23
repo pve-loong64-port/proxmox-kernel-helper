@@ -149,7 +149,7 @@ init_bootloader() {
 
 	mkdir -p "$esp_mp"
 	echo "Mounting '$part' on '$esp_mp'."
-	mount -t vfat "$part" "$esp_mp"
+	mount -t vfat -o umask=0077 "$part" "$esp_mp"
 
 	if [ -z "$mode" ]; then
 		if [ -e "$esp_mp/EFI/proxmox/grubx64.efi" ]; then
