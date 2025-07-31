@@ -182,7 +182,11 @@ init_bootloader() {
 			mkdir -p "$esp_mp/$PMX_ESP_DIR"
 			if ! command -V bootctl >/dev/null 2>&1 ;
 			then
-				warn "E: bootctl is not available - make sure systemd-boot is installed"
+				warn "E: bootctl is not available - make sure systemd-boot-tools is installed"
+				exit 1
+			fi
+			if [ ! -d /usr/lib/systemd/boot/efi ]; then
+				warn "E: systemd-boot EFI files not available - make sure systemd-boot-efi is installed"
 				exit 1
 			fi
 
