@@ -271,6 +271,18 @@ check_grub_efi_removable_status() {
 	echo ""
 }
 
+mask_sd_gpt_generator() {
+	generator="systemd-gpt-auto-generator"
+	mask_dir="/etc/systemd/system-generators"
+	# already masked (or re-enabled manually) - nothing to do:
+	if [ -e "$mask_dir/$generator" ]; then
+		return
+	fi
+	warn "$generator causes problems in certain configurations - MASKING it!"
+	mkdir -p "$mask_dir"
+	ln -s /dev/null "$mask_dir/$generator"
+}
+
 set -- $DEB_MAINT_PARAMS
 mode="${1#\'}"
 mode="${mode%\'}"
@@ -286,6 +298,7 @@ case $0:$mode in
 		disable_systemd_boot_hook
 		check_grub_efi_package
 		check_grub_efi_removable_status
+		mask_sd_gpt_generator
 	;;
 	 */postrm.d/*:|*/postrm.d/*:remove)
 		reexec_in_mountns "$@"
@@ -295,6 +308,7 @@ case $0:$mode in
 		disable_systemd_boot_hook
 		check_grub_efi_package
 		check_grub_efi_removable_status
+		mask_sd_gpt_generator
 	;;
 esac
 
