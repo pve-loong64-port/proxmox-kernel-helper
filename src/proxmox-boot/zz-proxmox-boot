@@ -278,7 +278,7 @@ mask_sd_gpt_generator() {
 	if [ -e "$mask_dir/$generator" ]; then
 		return
 	fi
-	warn "$generator causes problems in certain configurations - MASKING it!"
+	warn "masking the $generator systemd generator unit to avoid problems with the ESP and updates in certain setups."
 	mkdir -p "$mask_dir"
 	ln -s /dev/null "$mask_dir/$generator"
 }
