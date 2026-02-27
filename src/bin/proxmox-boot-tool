@@ -158,7 +158,13 @@ init_bootloader() {
 		fi
 	fi
 
+
 	if [ -d /sys/firmware/efi ]; then
+		memtest=memtest86+x64.efi
+		if [ -f "/boot/$memtest" ]; then
+			echo "Adding $memtest .."
+			cp "/boot/$memtest" "$esp_mp/"
+		fi
 		if [ -n "$mode" ] && [ "$mode" = "grub" ]; then
 			echo "Installing grub x86_64 target.."
 			grub-install.real \
@@ -196,8 +202,23 @@ init_bootloader() {
 			echo "timeout 3" > "$esp_mp/$PMX_LOADER_CONF.tmp"
 			echo "default proxmox-*" >> "$esp_mp/$PMX_LOADER_CONF.tmp"
 			mv "$esp_mp/$PMX_LOADER_CONF.tmp" "$esp_mp/$PMX_LOADER_CONF"
+			memtest_conf="$esp_mp/loader/entries/$memtest.conf"
+			if [ -f "/boot/$memtest" ]; then
+				echo "Adding $memtest .."
+				cp "/boot/$memtest" "$esp_mp/EFI/"
+				cat > "$memtest_conf.tmp" <<- EOF
+					title Memory test ($memtest)
+					efi   /EFI/$memtest
+				EOF
+				mv "$memtest_conf.tmp" "$memtest_conf"
+			fi
 		fi
 	else
+		memtest=memtest86+x64.bin
+		if [ -f "/boot/$memtest" ]; then
+			echo "Adding $memtest .."
+			cp "/boot/$memtest" "$esp_mp/"
+		fi
 		echo "Installing grub i386-pc target.."
 		grub-install.real \
 			--boot-directory "$esp_mp" \
