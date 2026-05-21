@@ -1,3 +1,9 @@
+proxmox-kernel-helper (9.2.0) trixie; urgency=medium
+
+  * fix #7223: proxmox-boot: add memtest86 as entry to all boot-loaders.
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 21 May 2026 14:30:07 +0200
+
 proxmox-kernel-helper (9.0.4) trixie; urgency=medium
 
   * proxmox-boot: unconditionally mask systemd-gpt-auto-generator to avoid
