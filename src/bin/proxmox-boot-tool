@@ -4,6 +4,8 @@ set -e
 
 . /usr/share/proxmox-kernel-helper/scripts/functions
 
+ARCH="$(dpkg --print-architecture)"
+
 _add_entry_to_list_file() {
 	file="$1"
 	entry="$2"
@@ -152,7 +154,7 @@ init_bootloader() {
 	mount -t vfat -o umask=0077 "$part" "$esp_mp"
 
 	if [ -z "$mode" ]; then
-		if [ -e "$esp_mp/EFI/proxmox/grubx64.efi" ]; then
+		if [ -e "$esp_mp/EFI/proxmox/grub*.efi" ]; then
 			# for reinit support
 			mode=grub
 		fi
@@ -166,23 +168,61 @@ init_bootloader() {
 			cp "/boot/$memtest" "$esp_mp/"
 		fi
 		if [ -n "$mode" ] && [ "$mode" = "grub" ]; then
-			echo "Installing grub x86_64 target.."
-			grub-install.real \
-				--boot-directory "${esp_mp}" \
-				--target x86_64-efi \
-				--no-floppy \
-				--efi-directory "${esp_mp}" \
-				--bootloader-id 'proxmox' \
-				"/dev/$PKNAME"
-			echo "Installing grub x86_64 target (removable).."
-			grub-install.real \
-				--boot-directory "${esp_mp}" \
-				--target x86_64-efi \
-				--no-floppy \
-				--efi-directory "${esp_mp}" \
-				--removable \
-				--bootloader-id 'proxmox' \
-				"/dev/$PKNAME"
+			if [ "$ARCH" = "amd64" ]; then
+				echo "Installing grub x86_64 target.."
+				grub-install.real \
+					--boot-directory "${esp_mp}" \
+					--target x86_64-efi \
+					--no-floppy \
+					--efi-directory "${esp_mp}" \
+					--bootloader-id 'proxmox' \
+					"/dev/$PKNAME"
+				echo "Installing grub x86_64 target (removable).."
+				grub-install.real \
+					--boot-directory "${esp_mp}" \
+					--target x86_64-efi \
+					--no-floppy \
+					--efi-directory "${esp_mp}" \
+					--removable \
+					--bootloader-id 'proxmox' \
+					"/dev/$PKNAME"
+			elif [ "$ARCH" = "arm64" ]; then
+				echo "Installing grub arm64 target.."
+				grub-install.real \
+					--boot-directory "${esp_mp}" \
+					--target arm64-efi \
+					--no-floppy \
+					--efi-directory "${esp_mp}" \
+					--bootloader-id 'proxmox' \
+					"/dev/$PKNAME"
+				echo "Installing grub arm64 target (removable).."
+				grub-install.real \
+					--boot-directory "${esp_mp}" \
+					--target arm64-efi \
+					--no-floppy \
+					--efi-directory "${esp_mp}" \
+					--removable \
+					--bootloader-id 'proxmox' \
+					"/dev/$PKNAME"
+			elif [ "$ARCH" = "loong64" ]; then
+				echo "Installing grub loongarch64 target.."
+				grub-install.real \
+					--boot-directory "${esp_mp}" \
+					--target loongarch64-efi \
+					--no-floppy \
+					--efi-directory "${esp_mp}" \
+					--bootloader-id 'proxmox' \
+					"/dev/$PKNAME"
+				echo "Installing grub loongarch64 target (removable).."
+				grub-install.real \
+					--boot-directory "${esp_mp}" \
+					--target loongarch64-efi \
+					--no-floppy \
+					--efi-directory "${esp_mp}" \
+					--removable \
+					--bootloader-id 'proxmox' \
+					"/dev/$PKNAME"
+			fi
 		else
 			echo "Installing systemd-boot.."
 			mkdir -p "$esp_mp/$PMX_ESP_DIR"
@@ -213,7 +253,7 @@ init_bootloader() {
 				mv "$memtest_conf.tmp" "$memtest_conf"
 			fi
 		fi
-	else
+	elif [ "$ARCH" = "amd64" ]; then
 		memtest=memtest86+x64.bin
 		if [ -f "/boot/$memtest" ]; then
 			echo "Adding $memtest .."
